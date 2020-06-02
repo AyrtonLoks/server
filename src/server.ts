@@ -1,0 +1,63 @@
+import express from 'express';
+
+// a biblioteca express é usada para adm rotas
+
+const app = express();
+
+// para que o express entenda o formato json
+
+app.use(express.json());
+
+// rota: endereço completo da requisição (ex.: localhost:3333/users)
+// recurso: qual entidade estamos acessando do sistema (ex.: /users)
+
+// GET: buca uma ou mais informações do back-end
+// POST: cria uma nova informação no back-end
+// PUT: atualiza uma informação existente no back-end
+// DELETE: remove uma informação do back-end
+
+// POST http://localhost:3333/users - criar usuário
+// GET http://localhost:3333/users - listar usuários
+//GET http://localhost:3333/users/5 - busca dados do usuário de id 5
+
+
+// Request param: parâmetro que vem na própria rota que identifica um recurso
+// Query param: parâmetros que vem ma própria rota, geralmente opcionais, para filtros, paginação
+// Request body: parâmetros para criação/atualização de informações
+
+const users = [
+    'Ayrton',  //0
+    'Vinicio', //1
+    'Victor',  //2
+];
+
+app.get('/users', (request, response) => {
+    const search = String(request.query.search);
+
+    const filteredUsers = search ? users.filter(user => user.includes(search)) : users;
+
+    return response.json(filteredUsers);
+});
+
+app.get('/users/:id', (request, response) => {
+    const id = Number(request.params.id);
+    
+    const user = users[id];
+
+    return response.json(user);
+});
+
+app.post('/users', (request, response) => {
+    const data = request.body;
+
+    console.log(data);
+
+    const user = {
+        name: data.name,
+        email: data.email,
+    };
+
+    return response.json(user);
+});
+
+app.listen(3333);
