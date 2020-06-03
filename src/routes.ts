@@ -1,16 +1,17 @@
 import express from 'express';
-import knex from './database/connection';
 // arquivo de administração das rotas
 // a biblioteca express é usada para administrar rotas
-// 'knex from .../connection' é a importação da conexão com o BD
 
 import PointsController from './controllers/PointsController';
-//importação do controller com a classe que possui o método de criação da rota /points
+import ItemsController from './controllers/ItemsController';
+//importação dos controllers com as classes que possuem os métodos de criação das rotas /points e /items
 
 // Router é um método de rotas do express
 const routes = express.Router();
-// instanciando a class importada
+// instanciando as classes importadas
+// index (listar vários), show (listar um único), create, update, delete
 const pointsController = new PointsController();
+const itemsController = new ItemsController();
 
 // rota: endereço completo da requisição (ex.: localhost:3333/users)
 // recurso: qual entidade estamos acessando do sistema (ex.: /users)
@@ -30,23 +31,15 @@ const pointsController = new PointsController();
 // Request body: parâmetros para criação/atualização de informações
 
 // rota para exibir itens
-// async indica que é uma função assíncrona que não executará de imediato, por isso é necessário await, pois fazer querys em BDs são ações que demandam tempo
-routes.get('/items', async (request, response) => {
-    const items = await knex('items').select('*');
-
-    const serializedItems = items.map(item => { 
-        return {
-            id: item.id,
-            title: item.title,
-            image_url: `http://localhost:3333/uploads/${item.image}`,
-        };
-    });
-
-    return response.json(serializedItems);
-});
+routes.get('/items', itemsController.index);
 
 // rota para criação dos pontos de coleta
 routes.post('/points', pointsController.create);
+routes.get('/points', pointsController.index);
+routes.get('/points/:id', pointsController.show);
 
-// exportação do servidor para qualquer arquivo que precisaremos delas, como o server por exemplo
+// exportação das rotas para qualquer arquivo que precisaremos delas, como o server por exemplo
 export default routes;
+
+// Service Pattern
+// Repository Pattern (Data Mapper)

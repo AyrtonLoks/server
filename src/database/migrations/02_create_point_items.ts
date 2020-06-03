@@ -12,10 +12,10 @@ export async function up(knex: Knex) {
             .references('id')
             .inTable('points'); //cria uma chave estrangeira para points
         
-            table.integer('item_id')
-                .notNullable()
-                .references('id')
-                .inTable('items'); //cria uma chave estrangeira para items
+        table.integer('item_id')
+            .notNullable()
+            .references('id')
+            .inTable('items'); //cria uma chave estrangeira para items
     });
 }
 
