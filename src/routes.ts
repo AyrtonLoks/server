@@ -1,4 +1,5 @@
 import express from 'express';
+import multer from 'multer';
 // arquivo de administração das rotas
 // a biblioteca express é usada para administrar rotas
 
@@ -6,8 +7,12 @@ import PointsController from './controllers/PointsController';
 import ItemsController from './controllers/ItemsController';
 //importação dos controllers com as classes que possuem os métodos de criação das rotas /points e /items
 
+import multerConfig from './config/multer';
+
 // Router é um método de rotas do express
 const routes = express.Router();
+const upload = multer(multerConfig);
+
 // instanciando as classes importadas
 // index (listar vários), show (listar um único), create, update, delete
 const pointsController = new PointsController();
@@ -34,12 +39,13 @@ const itemsController = new ItemsController();
 routes.get('/items', itemsController.index);
 
 // rota para criação dos pontos de coleta
-routes.post('/points', pointsController.create);
+routes.post('/points', upload.single('image'), pointsController.create);
+
 routes.get('/points', pointsController.index);
 routes.get('/points/:id', pointsController.show);
 
 // exportação das rotas para qualquer arquivo que precisaremos delas, como o server por exemplo
 export default routes;
-
+// coisas para ver depois:
 // Service Pattern
 // Repository Pattern (Data Mapper)
