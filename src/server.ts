@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import routes from './routes';
+import { errors } from 'celebrate';
 // arquivo do servidor
 // a biblioteca express é usada para administrar rotas
 
@@ -19,6 +20,8 @@ app.use(routes);
 // criação de uma rota para acesso das imagens de cada item pelo navegador
 // static é um método para uso de/servir arquivos estáticos como imagens, pdf, .doc
 app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')));
+
+app.use(errors());
 
 app.listen(3333, ()=>{
     console.log('Server online');
